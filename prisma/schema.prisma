@@ -1,0 +1,50 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model users {
+  idusers        String  @id 
+  name_user      String
+  lastname_user  String
+  phone_number   String
+  email          String
+  password       String
+  type_user      String
+  soccer_fields  fields[]
+  bookings bookings[]
+}
+
+model fields {
+  id_fields      String   @id
+  name_field     String
+  description_field  String
+  address_field  String
+  price_hour           String
+  imagen               String
+  owner                String   @map("owner_id") // Renombramos la columna para seguir la convención de Prisma
+  users                users    @relation(fields: [owner], references: [idusers])
+  bookings bookings []
+}
+
+model bookings {
+  idbookings String @id
+  start_datatime DateTime
+  end_datatime DateTime
+  reservation_status String
+  user String @map("user_id")
+  users users @relation(fields: [user], references: [idusers]) // Relación con el modelo users
+  field String @map("field_id")
+  fields fields @relation(fields: [field], references: [id_fields]) // Relación con el modelo fields
+}
