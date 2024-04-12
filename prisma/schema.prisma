@@ -20,7 +20,6 @@ model users {
   lastname_user  String
   phone_number   String
   email          String
-  password       String
   type_user      String
   soccer_fields  fields[]
   bookings bookings[]
